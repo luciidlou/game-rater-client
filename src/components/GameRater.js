@@ -1,14 +1,14 @@
 import React from "react"
-import { Route, Redirect } from "react-router-dom"
 import { ApplicationViews } from "./ApplicationViews"
 import { NavBar } from "./nav/NavBar"
 import { Login } from "./auth/Login"
 import { Register } from "./auth/Register"
+import { Redirect, Route } from "react-router-dom"
 
-export const LevelUp = () => (
+export const GameRater = () => (
     <>
         <Route render={() => {
-            if (localStorage.getItem("lu_token")) {
+            if (localStorage.getItem("gr_token")) {
                 return <>
                     <Route>
                         <NavBar />

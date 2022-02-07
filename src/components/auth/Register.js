@@ -6,7 +6,6 @@ export const Register = () => {
     const firstName = useRef()
     const lastName = useRef()
     const username = useRef()
-    const bio = useRef()
     const password = useRef()
     const verifyPassword = useRef()
     const passwordDialog = useRef()
@@ -34,7 +33,7 @@ export const Register = () => {
                 .then(res => res.json())
                 .then(res => {
                     if ("token" in res) {
-                        localStorage.setItem("lu_token", res.token)
+                        localStorage.setItem("gr_token", res.token)
                         history.push("/")
                     }
                 })

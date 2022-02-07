@@ -1,0 +1,11 @@
+.game-details {
+    padding-bottom: 10px;
+    border-bottom: 1px solid black;
+}
+.game-title {
+    margin: 0;
+}
+.game-description {
+    font-style: italic;
+    margin-bottom: 20px;
+}
