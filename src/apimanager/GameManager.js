@@ -4,11 +4,11 @@ import { Settings } from "../utilities/Settings"
 export const GameManager = {
     async getAll() {
         const res = await fetch(`${Settings.remoteUrl}/games`, FetchOptions())
-        return res.json()
+        return await res.json()
     },
     async get(id) {
         const res = await fetch(`${Settings.remoteUrl}/games/${id}`, FetchOptions())
-        return res.json()
+        return await res.json()
     },
     async add(newGame) {
         const res = await fetch(`${Settings.remoteUrl}/games`, FetchOptions("POST", newGame))

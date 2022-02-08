@@ -4,6 +4,7 @@
 .games {
     padding: 15px;
     margin: 15px 0;
+    height: 110px;
     border-bottom: 1px solid black;
 }
 /* .games:hover {

@@ -17,16 +17,19 @@ export const GameList = ({ games, syncGames }) => {
             </div>
             {
                 games.map(game => {
-                    
                     return (
                         <section key={game.id} className="games">
-                            <div className="game">
-                                <div className="game-title" onClick={() => history.push(`/games/${game.id}`)}>{game.title}</div>
-                            </div>
-                            <div className="btn-container">
-                                <button id="editBtn" onClick={() => history.push(`/games/${game.id}/edit`)}>Edit</button>
-                                <button id="secondaryBtn" onClick={() => handleDeleteGame(game.id)}>Delete</button>
-                            </div>
+                            <div className="game-title" onClick={() => history.push(`/games/${game.id}`)}>{game.title} ({game.categories[0].label})</div>
+                            {
+                                game.uploaded
+                                    ?
+                                    <div className="btn-container">
+                                        <button id="editBtn" onClick={() => history.push(`/games/${game.id}/edit`)}>Edit</button>
+                                        <button id="secondaryBtn" onClick={() => handleDeleteGame(game.id)}>Delete</button>
+                                    </div>
+                                    :
+                                    ""
+                            }
                         </section>
                     )
                 })

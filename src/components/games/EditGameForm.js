@@ -18,7 +18,7 @@ Categories
 export const EditedGameForm = ({ syncGames, categories }) => {
     const history = useHistory()
     const { gameId } = useParams()
-    const [gameBuilder, updateExistingGame] = useState({
+    const [gameBuilder, updateGameBuilder] = useState({
         title: "",
         designer: "",
         description: "",
@@ -30,26 +30,24 @@ export const EditedGameForm = ({ syncGames, categories }) => {
     })
 
     useEffect(() => {
-        GameManager.get(gameId).then(res => {
-            const copy = { ...gameBuilder }
-            copy.title = res.title
-            copy.designer = res.designer
-            copy.description = res.description
-            copy.yearReleased = res.year_released
-            copy.numOfPlayers = res.num_of_players
-            copy.estimatedPlayTime = res.estimated_play_time
-            copy.ageRecommendation = res.age_recommendation
-            copy.categoryId = res.categories[0].id
-            updateExistingGame(copy)
-        })
-    }, [gameId])
+        GameManager.get(gameId).then((game) => updateGameBuilder({
+            title: game.title,
+            designer: game.designer,
+            description: game.description,
+            yearReleased: game.year_released,
+            numOfPlayers: game.num_of_players,
+            estimatedPlayTime: game.estimated_play_time,
+            ageRecommendation: game.age_recommendation,
+            categoryId: game.categories[0].id
+        }))
+    }, [])
 
     const handleOnChange = (event) => {
         const copy = { ...gameBuilder }
         const key = event.target.name
         const value = event.target.value
         copy[key] = value
-        updateExistingGame(copy)
+        updateGameBuilder(copy)
     }
 
     const handleSubmitGame = (event) => {
