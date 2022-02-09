@@ -32,9 +32,12 @@ export const GameDetails = () => {
             })
     }
 
+    const syncGame = () => {
+        GameManager.get(gameId).then(setGame)
+    }
     useEffect(() => {
         syncRating()
-        GameManager.get(gameId).then(setGame)
+        syncGame()
     }, [])
 
     const labels = {
@@ -67,9 +70,12 @@ export const GameDetails = () => {
                 GameRatingsManager.delete(existingRating.id)
                     .then(() => setExistingRating(null))
                     .then(syncRating)
+                    .then(syncGame)
             }
             else {
-                GameRatingsManager.update(existingRating).then(syncRating)
+                GameRatingsManager.update(existingRating)
+                    .then(syncRating)
+                    .then(syncGame)
             }
         }
     }
@@ -85,13 +91,12 @@ export const GameDetails = () => {
                 <div className="detail game-players">Number of players: {game.num_of_players}</div>
                 <div className="detail game-time">Estimated play time: {game.estimated_play_time} hours</div>
                 <div className="detail game-age">Recommended age: {game.age_recommendation} years old</div>
-                <Box
-                    sx={{
-                        width: 300,
-                        display: 'flex',
-                        alignItems: 'center',
-                    }}
-                >
+                <div className="detail game-average_rating">Average rating: {game.average_rating} stars</div>
+                <Box sx={{
+                    width: 300,
+                    display: 'flex',
+                    alignItems: 'center',
+                }}>
                     <Rating
                         name="rating"
                         value={existingRating ? existingRating.rating : 0}
