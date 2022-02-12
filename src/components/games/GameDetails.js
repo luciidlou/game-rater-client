@@ -4,23 +4,19 @@ import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import { GameManager } from "../../apimanager/GameManager"
 import './GameDetails.css'
-import { GameRatingsManager } from "../../apimanager/GameRatingManager";
-/*
-DISPLAY: 
-Title
-Designer
-Description
-Year released
-Number of players
-Estimated time to play
-Age recommendation
-Categories
-*/
+import { GameRatingsManager } from "../../apimanager/GameRatingManager"
+import { GameImageManager } from "../../apimanager/GameImageManager";
+
+
 export const GameDetails = () => {
     const { gameId } = useParams()
     const [game, setGame] = useState({})
     const [existingRating, setExistingRating] = useState(null)
     const [hover, setHover] = useState(-1);
+    const [imgObj, setImgObj] = useState({
+        action_pic: "",
+        game: 0
+    })
 
     const syncRating = () => {
         GameRatingsManager.getRatingsByGame(gameId)
@@ -62,7 +58,9 @@ export const GameDetails = () => {
         }
 
         if (existingRating === null) {
-            GameRatingsManager.add(newRating).then(syncRating)
+            GameRatingsManager.add(newRating)
+                .then(syncRating)
+                .then(syncGame)
         }
         else {
             existingRating.rating = newValue
@@ -80,6 +78,24 @@ export const GameDetails = () => {
         }
     }
 
+    const getBase64 = (file, callback) => {
+        const reader = new FileReader();
+        reader.addEventListener('load', () => callback(reader.result));
+        reader.readAsDataURL(file);
+    }
+
+    const createGameImageString = (event) => {
+        getBase64(event.target.files[0], (base64ImageString) => {
+            console.log("Base64 of file is", base64ImageString);
+
+            // Update a component state variable to the value of base64ImageString
+            setImgObj({
+                action_pic: base64ImageString,
+                game: parseInt(gameId)
+            })
+        });
+    }
+
     return (
         game.categories
             ?
@@ -91,9 +107,10 @@ export const GameDetails = () => {
                 <div className="detail game-players">Number of players: {game.num_of_players}</div>
                 <div className="detail game-time">Estimated play time: {game.estimated_play_time} hours</div>
                 <div className="detail game-age">Recommended age: {game.age_recommendation} years old</div>
-                <div className="detail game-average_rating">Average rating: {game.average_rating} stars</div>
+                <div className="detail game-average_rating">Average rating: {labels[Math.round(game.average_rating * 2) / 2]}</div>
+                <span>Your rating:</span>
                 <Box sx={{
-                    width: 300,
+                    width: 500,
                     display: 'flex',
                     alignItems: 'center',
                 }}>
@@ -113,9 +130,13 @@ export const GameDetails = () => {
                             <Box sx={{ ml: 2 }}>{labels[hover === -1 ? existingRating.rating : hover]}</Box>
                             :
                             <Box sx={{ ml: 2 }}>{labels[hover === -1 ? 0 : hover]}</Box>
-
                     }
                 </Box>
+                <input type="file" id="game_image" onChange={createGameImageString} />
+                <input type="hidden" name="game_id" value={game.id} />
+                <button onClick={() => {
+                    GameImageManager.add(imgObj)
+                }}>Upload</button>
             </section>
             :
             ""

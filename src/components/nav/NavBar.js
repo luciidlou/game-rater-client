@@ -11,10 +11,7 @@ export const NavBar = () => {
                 <Link to="/games">Games</Link>
             </li>
             <li className="navbar__item">
-                Navigation link
-            </li>
-            <li className="navbar__item">
-                Navigation link
+                <Link to="/images">Images</Link>
             </li>
             {
                 (localStorage.getItem("gr_token") !== null) ?
